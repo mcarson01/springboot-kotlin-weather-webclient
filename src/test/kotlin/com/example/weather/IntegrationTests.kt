@@ -15,8 +15,9 @@ class IntegrationTests(@Autowired val restTemplate: TestRestTemplate) {
 	fun `Assert weather results, content and status code`() {
 		val entity = restTemplate.getForEntity<String>("/weather")
 		assertThat(entity.statusCode).isEqualTo(HttpStatus.OK)
-		assertThat(entity.body).contains("\"forecast\":\"https://api.weather.gov/gridpoints/TOP/32,81/forecast\"")
-		assertThat(entity.body).contains("\"forecastHourly\":\"https://api.weather.gov/gridpoints/TOP/32,81/forecast/hourly\"")
+		assertThat(entity.body).contains("{\"daily\":[{\"day_name\":\"")
+		assertThat(entity.body).contains("\"temp_high_celsius\"")
+		assertThat(entity.body).contains("\"forecast_blurp\":")
 	}
 
 }
