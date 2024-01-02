@@ -1,5 +1,6 @@
 package com.example.weather.controller
 
+import com.example.weather.data.Daily
 import com.example.weather.service.WeatherService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,4 +24,3 @@ class WeatherController()  {
 }
 
 
-class Daily(val daily: List<Map<String, Any>>)  {}
