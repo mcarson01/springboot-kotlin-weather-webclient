@@ -1,7 +1,8 @@
 package com.example.weather.integration
 
-import com.example.weather.data.Daily
+import com.example.weather.data.Forecast
 import com.fasterxml.jackson.databind.JsonNode
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -10,9 +11,11 @@ import reactor.core.publisher.Mono
 @Component
 class WeatherIntegration {
 
-    fun getWeather(): Mono<Daily> {
-        val serviceUrl = "https://api.weather.gov/gridpoints/MLB/33,70/forecast"
-        val client = WebClient.create(serviceUrl)
+    @Value("\${weather.url}")
+    lateinit var weatherUrl: String
+
+    fun getWeather(): Mono<Forecast> {
+        val client = WebClient.create(weatherUrl)
 
         val response = client.get()
             .accept(MediaType.APPLICATION_JSON)
@@ -25,7 +28,7 @@ class WeatherIntegration {
                     "temp_high_celsius" to (response.path("periods").get(0).path("temperature").asInt() - 32) * 5 / 9,
                     "forecast_blurp" to response.path("periods").get(0).path("shortForecast"),
                 )
-                Daily(mutableListOf(periodMap))
+                Forecast(mutableListOf(periodMap))
             }
         return response
     }

@@ -1,6 +1,7 @@
 package com.example.weather.controller
 
 import com.example.weather.data.Daily
+import com.example.weather.data.ForecastResponse
 import com.example.weather.service.WeatherService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
@@ -19,6 +20,7 @@ class WeatherController()  {
 	@ResponseBody
 	fun weather(): Mono<Daily> {
 		return weatherService.getWeather()
+			.map { response -> Daily(response.forecastResponse) }
 	}
 
 }
