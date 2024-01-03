@@ -1,6 +1,6 @@
 package com.example.weather.integration
 
-import com.example.weather.data.Forecast
+import com.example.weather.domain.ForecastDomain
 import com.fasterxml.jackson.databind.JsonNode
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
@@ -14,7 +14,7 @@ class WeatherIntegration {
     @Value("\${weather.url}")
     lateinit var weatherUrl: String
 
-    fun getWeather(): Mono<Forecast> {
+    fun getWeather(): Mono<ForecastDomain> {
         val client = WebClient.create(weatherUrl)
 
         val response = client.get()
@@ -28,7 +28,7 @@ class WeatherIntegration {
                     "temp_high_celsius" to (response.path("periods").get(0).path("temperature").asInt() - 32) * 5 / 9,
                     "forecast_blurp" to response.path("periods").get(0).path("shortForecast"),
                 )
-                Forecast(mutableListOf(periodMap))
+                ForecastDomain(mutableListOf(periodMap))
             }
         return response
     }
